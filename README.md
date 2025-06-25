@@ -44,13 +44,13 @@ A modern web app for transparent, structured feedback between managers and emplo
 ### UI Screenshots
 
 - Manager dashboard (team overview, sentiment trends)
-- ![Manager dashboard screenshot](assets/MDH.PNG)
+ ![Manager dashboard screenshot](assets/MDH.PNG)
 - Manager given feedback (timeline view)
-- ![Employee feedback screenshot](assets/MDGF.PNG)
+ ![Employee feedback screenshot](assets/MDGF.PNG)
 - Employee dashboard (feedback timeline)
   ![Employee dashboard screenshot](assets/EDH.PNG)
 - Employee Settings (profile, password change)
-  ![Employee settings screenshot](assets/ES.PNG)
+  ![Employee settings screenshot](assets/EDS.PNG)
 - Feedback modal (with reminders, required strengths)
   ![Feedback modal screenshot](assets/FM.PNG)
 
@@ -59,11 +59,11 @@ A modern web app for transparent, structured feedback between managers and emplo
 ### System Diagrams
 
 - **ERD:** Entity-Relationship Diagram of users, feedback, comments, tags.
-- ![ERD screenshot](assets/ERD.PNG)
+ ![ERD screenshot](assets/ERD.PNG)
 - **API Endpoints:** REST API structure.
-- ![API Endpoints screenshot](assets/Endpoints.PNG)
+ ![API Endpoints screenshot](assets/Endpoints.PNG)
 - **Auth Flow:** Diagram showing login, role assignment, and access control.
-- ![Auth Flow screenshot](assets/AuthFlow.PNG)
+ ![Auth Flow screenshot](assets/AuthFLow.PNG)
 
 ---
 
