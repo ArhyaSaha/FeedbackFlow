@@ -75,7 +75,7 @@ function ManagerHome() {
     const handleModalClose = () => {
         setShowModal(false);
         setEditingFeedback(null);
-        fetchData(); // Refresh data
+        fetchData();
     };
 
     const openDetailModal = (feedback) => {

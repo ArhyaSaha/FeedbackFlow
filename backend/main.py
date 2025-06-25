@@ -503,6 +503,53 @@ async def get_stats(current_user: User = Depends(get_current_user)):
             "positive": positive,
             "pending": pending
         }
+    
+@app.post("/api/request-feedback")
+async def request_feedback_from_manager(current_user: User = Depends(get_current_user)):
+    """
+    Send feedback request email to manager
+    """
+    if current_user.role != UserRole.employee:
+        raise HTTPException(
+            status_code=403,
+            detail="Only employees can request feedback from managers"
+        )
+    
+    if not current_user.manager_id:
+        raise HTTPException(
+            status_code=400,
+            detail="No manager assigned to your account"
+        )
+    
+    # Get manager details
+    manager = await UserDB.get_user_by_id(str(current_user.manager_id))
+    if not manager:
+        raise HTTPException(
+            status_code=404,
+            detail="Manager not found"
+        )
+    
+    # Import email utility
+    from email_utils import send_feedback_request_email
+    
+    # Send email
+    email_sent = send_feedback_request_email(
+        manager_email=manager.email,
+        employee_name=current_user.full_name,
+        manager_name=manager.full_name
+    )
+    
+    if not email_sent:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to send email. Please try again later."
+        )
+    
+    return {
+        "message": f"Feedback request sent to {manager.full_name} successfully!",
+        "manager_name": manager.full_name,
+        "manager_email": manager.email
+    }
 
 if __name__ == "__main__":
     import uvicorn

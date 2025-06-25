@@ -10,7 +10,8 @@ import {
     User,
     ThumbsUp,
     Tag,
-    X
+    X,
+    Mail
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -27,6 +28,7 @@ function EmployeeHome() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedDetailFeedback, setSelectedDetailFeedback] = useState(null);
+    const [isRequestingFeedback, setIsRequestingFeedback] = useState(false);
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
@@ -116,6 +118,55 @@ function EmployeeHome() {
         setShowDetailModal(true);
     };
 
+    const requestFeedbackFromManager = async () => {
+        setIsRequestingFeedback(true);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${backendUrl}/request-feedback`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                toast.success(
+                    `Feedback request sent to ${data.manager_name}!`,
+                    {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    }
+                );
+            } else {
+                throw new Error(data.detail || 'Failed to send request');
+            }
+        } catch (error) {
+            toast.error(
+                error.message || 'Failed to send feedback request',
+                {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "colored",
+                }
+            );
+            console.error('Error requesting feedback:', error);
+        } finally {
+            setIsRequestingFeedback(false);
+        }
+    };
+
     const getSentimentColor = (sentiment) => {
         switch (sentiment) {
             case 'positive': return 'text-green-600 bg-green-50 border-green-200';
@@ -143,11 +194,21 @@ function EmployeeHome() {
     return (
         <div className="p-8 max-w-7xl mx-auto">
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                    Welcome back, {user?.full_name}!
-                </h1>
-                <p className="text-gray-600">Here's your feedback overview and recent activity.</p>
+            <div className="mb-8 flex justify-between items-start">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                        Welcome back, {user?.full_name}!
+                    </h1>
+                    <p className="text-gray-600">Here's your feedback overview and recent activity.</p>
+                </div>
+                <button
+                    onClick={requestFeedbackFromManager}
+                    disabled={isRequestingFeedback}
+                    className="inline-flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <Mail className="w-4 h-4" />
+                    <span>{isRequestingFeedback ? 'Sending...' : 'Request Feedback'}</span>
+                </button>
             </div>
 
             {/* Stats Cards */}
