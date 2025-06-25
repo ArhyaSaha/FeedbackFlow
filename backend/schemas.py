@@ -40,6 +40,7 @@ class FeedbackCreate(BaseModel):
     improvements: str
     sentiment: SentimentType
     tags: List[str] = []
+    anonymous: bool = False
 
 class FeedbackUpdate(BaseModel):
     employee_id: Optional[str] = None
@@ -47,6 +48,7 @@ class FeedbackUpdate(BaseModel):
     improvements: Optional[str] = None
     sentiment: Optional[SentimentType] = None
     tags: Optional[List[str]] = None
+    anonymous: Optional[bool] = None
 
 class FeedbackAcknowledge(BaseModel):
     comment: Optional[str] = None
@@ -59,6 +61,7 @@ class FeedbackResponse(BaseModel):
     improvements: str
     sentiment: SentimentType
     tags: List[str]
+    anonymous: bool
     acknowledged: bool
     acknowledged_at: Optional[datetime]
     acknowledgment_comment: Optional[str]

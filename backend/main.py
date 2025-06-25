@@ -156,6 +156,11 @@ async def create_feedback(
                 status_code=400,
                 detail="You cannot give feedback to yourself"
             )
+        if feedback.anonymous and current_user.role != UserRole.employee:
+            raise HTTPException(
+                status_code=403,
+                detail="Only employees can give anonymous feedback"
+            )
     
     feedback_data = {
         "manager_id": ObjectId(str(current_user.id)),
@@ -163,9 +168,9 @@ async def create_feedback(
         "strengths": feedback.strengths,
         "improvements": feedback.improvements,
         "sentiment": feedback.sentiment,
-        "tags": feedback.tags
+        "tags": feedback.tags,
+        "anonymous": feedback.anonymous
     }
-    print(current_user.role)
     
     db_feedback = await FeedbackDB.create_feedback(feedback_data)
     
@@ -177,12 +182,13 @@ async def create_feedback(
         improvements=db_feedback.improvements,
         sentiment=db_feedback.sentiment,
         tags=db_feedback.tags,
+        anonymous=db_feedback.anonymous,
         acknowledged=db_feedback.acknowledged,
         acknowledged_at=db_feedback.acknowledged_at,
         acknowledgment_comment=db_feedback.acknowledgment_comment,
         created_at=db_feedback.created_at,
         updated_at=db_feedback.updated_at,
-        giver_name=current_user.full_name,
+        giver_name="Anonymous" if db_feedback.anonymous else current_user.full_name,
         receiver_name=employee.full_name,
         giver_role=current_user.role
     )
@@ -209,12 +215,13 @@ async def get_feedback(current_user: User = Depends(get_current_user)):
             improvements=feedback.improvements,
             sentiment=feedback.sentiment,
             tags=feedback.tags,
+            anonymous=feedback.anonymous,
             acknowledged=feedback.acknowledged,
             acknowledged_at=feedback.acknowledged_at,
             acknowledgment_comment=feedback.acknowledgment_comment,
             created_at=feedback.created_at,
             updated_at=feedback.updated_at,
-            giver_name=manager.full_name if manager else "",  
+            giver_name="Anonymous" if feedback.anonymous else (manager.full_name if manager else ""),  
             receiver_name=employee.full_name if employee else "",  
             giver_role=manager.role if manager else UserRole.employee  
         ))
@@ -249,6 +256,13 @@ async def update_feedback(
         update_data["tags"] = feedback_update.tags
     if feedback_update.employee_id is not None:  
         update_data["employee_id"] = ObjectId(feedback_update.employee_id)
+    if feedback_update.anonymous is not None:
+        if feedback_update.anonymous and current_user.role != UserRole.employee:
+            raise HTTPException(
+                status_code=403,
+                detail="Only employees can give anonymous feedback"
+            )
+        update_data["anonymous"] = feedback_update.anonymous
     
     updated_feedback = await FeedbackDB.update_feedback(feedback_id, update_data)
     
@@ -265,12 +279,13 @@ async def update_feedback(
         improvements=updated_feedback.improvements,
         sentiment=updated_feedback.sentiment,
         tags=updated_feedback.tags,
+        anonymous=updated_feedback.anonymous,
         acknowledged=updated_feedback.acknowledged,
         acknowledged_at=updated_feedback.acknowledged_at,
         acknowledgment_comment=updated_feedback.acknowledgment_comment,
         created_at=updated_feedback.created_at,
         updated_at=updated_feedback.updated_at,
-        giver_name=current_user.full_name if current_user else "",  
+        giver_name="Anonymous" if updated_feedback.anonymous else (current_user.full_name if current_user else ""),  
         receiver_name=employee.full_name if employee else "",  
         giver_role=current_user.role if current_user else UserRole.employee  
     )
@@ -293,17 +308,18 @@ async def get_received_feedback(current_user: User = Depends(get_current_user)):
         result.append(FeedbackResponse(
             id=str(feedback.id),
             giver_id=str(feedback.manager_id),  
-            receiver_id=str(feedback.employee_id), 
+            receiver_id=str(feedback.employee_id),  
             strengths=feedback.strengths,
             improvements=feedback.improvements,
             sentiment=feedback.sentiment,
             tags=feedback.tags,
+            anonymous=feedback.anonymous,
             acknowledged=feedback.acknowledged,
             acknowledged_at=feedback.acknowledged_at,
             acknowledgment_comment=feedback.acknowledgment_comment,
             created_at=feedback.created_at,
             updated_at=feedback.updated_at,
-            giver_name=manager.full_name if manager else "",  
+            giver_name="Anonymous" if feedback.anonymous else (manager.full_name if manager else ""),  
             receiver_name=employee.full_name if employee else "",  
             giver_role=manager.role if manager else UserRole.employee  
         ))
@@ -333,12 +349,13 @@ async def get_given_feedback(current_user: User = Depends(get_current_user)):
             improvements=feedback.improvements,
             sentiment=feedback.sentiment,
             tags=feedback.tags,
+            anonymous=feedback.anonymous,
             acknowledged=feedback.acknowledged,
             acknowledged_at=feedback.acknowledged_at,
             acknowledgment_comment=feedback.acknowledgment_comment,
             created_at=feedback.created_at,
             updated_at=feedback.updated_at,
-            giver_name=manager.full_name if manager else "",  
+            giver_name="Anonymous" if feedback.anonymous else (manager.full_name if manager else ""),  
             receiver_name=employee.full_name if employee else "",  
             giver_role=manager.role if manager else UserRole.employee  
         ))

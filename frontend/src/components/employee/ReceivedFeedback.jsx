@@ -722,7 +722,10 @@ function ReceivedFeedback() {
                             {!item.acknowledged && (
                                 <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
                                     <button
-                                        onClick={() => openAckModal(item)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            openAckModal(item);
+                                        }}
                                         className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
                                     >
                                         Acknowledge Feedback

@@ -10,7 +10,8 @@ function PeerFeedbackModal({ isOpen, onClose, colleagues, editingFeedback, selec
         strengths: '',
         improvements: '',
         sentiment: 'positive',
-        tags: []
+        tags: [],
+        anonymous: false
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -36,13 +37,15 @@ function PeerFeedbackModal({ isOpen, onClose, colleagues, editingFeedback, selec
                 strengths: editingFeedback.strengths,
                 improvements: editingFeedback.improvements,
                 sentiment: editingFeedback.sentiment,
-                tags: editingFeedback.tags || []
+                tags: editingFeedback.tags || [],
+                anonymous: editingFeedback.anonymous || false
             });
         } else if (selectedColleague) {
             setFormData(prev => ({
                 ...prev,
                 employee_id: selectedColleague.id,
-                tags: []
+                tags: [],
+                anonymous: false
             }));
         } else {
             setFormData({
@@ -50,7 +53,8 @@ function PeerFeedbackModal({ isOpen, onClose, colleagues, editingFeedback, selec
                 strengths: '',
                 improvements: '',
                 sentiment: 'positive',
-                tags: []
+                tags: [],
+                anonymous: false
             });
         }
     }, [editingFeedback, selectedColleague]);
@@ -431,6 +435,46 @@ Constructive feedback with a positive tone encourages continuous improvement."
                                 </label>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Anonymous Toggle */}
+                    <div>
+                        <div className="flex items-center justify-between">
+                            <label className="block text-sm font-medium text-gray-700">
+                                Anonymous Feedback
+                            </label>
+                            <div className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="anonymous"
+                                    checked={formData.anonymous}
+                                    onChange={(e) => setFormData(prev => ({
+                                        ...prev,
+                                        anonymous: e.target.checked
+                                    }))}
+                                    className="sr-only"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData(prev => ({
+                                        ...prev,
+                                        anonymous: !prev.anonymous
+                                    }))}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${formData.anonymous
+                                        ? 'bg-green-600'
+                                        : 'bg-gray-200'
+                                        }`}
+                                >
+                                    <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.anonymous ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                            When enabled, your name will be hidden from the recipient. Only employees can give anonymous feedback.
+                        </p>
                     </div>
 
                     {/* Error Message */}

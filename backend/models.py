@@ -55,6 +55,7 @@ class Feedback(BaseModel):
     improvements: str
     sentiment: SentimentType
     tags: List[str] = Field(default_factory=list)  
+    anonymous: bool = False 
     acknowledged: bool = False
     acknowledged_at: Optional[datetime] = None
     acknowledgment_comment: Optional[str] = None
