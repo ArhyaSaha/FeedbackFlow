@@ -44,26 +44,26 @@ A modern web app for transparent, structured feedback between managers and emplo
 ### UI Screenshots
 
 - Manager dashboard (team overview, sentiment trends)
-- ![Manager dashboard screenshot](assets/MDH.png)
+- ![Manager dashboard screenshot](assets/MDH.PNG)
 - Manager given feedback (timeline view)
-- ![Employee feedback screenshot](assets/MDGF.png)
+- ![Employee feedback screenshot](assets/MDGF.PNG)
 - Employee dashboard (feedback timeline)
-  ![Employee dashboard screenshot](assets/EDH.png)
+  ![Employee dashboard screenshot](assets/EDH.PNG)
 - Employee Settings (profile, password change)
-  ![Employee settings screenshot](assets/ES.png)
-- Feedback modal (with reminders, sprout icon, required strengths)
-  ![Feedback modal screenshot](assets/FM.png)
+  ![Employee settings screenshot](assets/ES.PNG)
+- Feedback modal (with reminders, required strengths)
+  ![Feedback modal screenshot](assets/FM.PNG)
 
 ---
 
 ### System Diagrams
 
 - **ERD:** Entity-Relationship Diagram of users, feedback, comments, tags.
-- ![ERD screenshot](assets/ERD.png)
+- ![ERD screenshot](assets/ERD.PNG)
 - **API Endpoints:** REST API structure.
-- ![API Endpoints screenshot](assets/Endpoints.png)
+- ![API Endpoints screenshot](assets/Endpoints.PNG)
 - **Auth Flow:** Diagram showing login, role assignment, and access control.
-- ![Auth Flow screenshot](assets/AuthFlow.png)
+- ![Auth Flow screenshot](assets/AuthFlow.PNG)
 
 ---
 
@@ -78,7 +78,7 @@ A modern web app for transparent, structured feedback between managers and emplo
 
 ### Deployment
 
-- _Live demo:_
+- _Live demo:_ [FeedbackFlow](https://dpdzero.arhya.codes)
 
 ### Installation
 
