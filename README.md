@@ -2,8 +2,9 @@
 
 # 🎯 FeedbackFlow
 
-An assignment for DPD Full Stack Intern role.
+An assignment for DPDzero Full Stack Intern role.
 A modern web app for transparent, structured feedback between managers and employees—enabling growth-focused conversations, sentiment tracking, and privacy with empathy.
+https://dpdzero.arhya.codes
 
 </div>
 
