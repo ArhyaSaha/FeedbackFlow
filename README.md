@@ -44,9 +44,9 @@ A modern web app for transparent, structured feedback between managers and emplo
 ### UI Screenshots
 
 - Manager dashboard (team overview, sentiment trends)
- ![Manager dashboard screenshot](assets/MDH.PNG)
+  ![Manager dashboard screenshot](assets/MDH.PNG)
 - Manager given feedback (timeline view)
- ![Employee feedback screenshot](assets/MDGF.PNG)
+  ![Employee feedback screenshot](assets/MDGF.PNG)
 - Employee dashboard (feedback timeline)
   ![Employee dashboard screenshot](assets/EDH.PNG)
 - Employee Settings (profile, password change)
@@ -59,11 +59,11 @@ A modern web app for transparent, structured feedback between managers and emplo
 ### System Diagrams
 
 - **ERD:** Entity-Relationship Diagram of users, feedback, comments, tags.
- ![ERD screenshot](assets/ERD.PNG)
+  ![ERD screenshot](assets/ERD.PNG)
 - **API Endpoints:** REST API structure.
- ![API Endpoints screenshot](assets/Endpoints.PNG)
+  ![API Endpoints screenshot](assets/Endpoints.PNG)
 - **Auth Flow:** Diagram showing login, role assignment, and access control.
- ![Auth Flow screenshot](assets/AuthFLow.PNG)
+  ![Auth Flow screenshot](assets/AuthFLow.PNG)
 
 ---
 
@@ -85,13 +85,45 @@ A modern web app for transparent, structured feedback between managers and emplo
 1.  **Clone the repo:**  
     `git clone <repo-url> && cd project`
 2.  **Backend:**
-    ```
+
+    ```bash
     cd backend
-    python -m venv venv
-    source venv/bin/activate  # or venv\Scripts\activate
-    pip install -r requirements.txt
-    python main.py
+    # Build the image
+    docker build -t feedback-backend .
     ```
+
+    Create `.env` file with:
+
+    ```env
+    MONGODB_URL=your_mongodb_url
+    DATABASE_NAME=feedback_db
+    SECRET_KEY=your_secret_key
+    SMTP_SERVER=smtp.gmail.com
+    SMTP_PORT=587
+    SMTP_USERNAME=your_email
+    SMTP_PASSWORD=your_password
+    FROM_EMAIL=no-reply@feedbackflow.com
+    ```
+
+    ```bash
+    # Run the container with environment file
+    docker run -p 8000:8000 --env-file .env feedback-backend
+
+    # Or run with individual environment variables
+    docker run -p 8000:8000 \
+    -e MONGODB_URL=your_mongodb_url \
+    -e DATABASE_NAME=feedback_db \
+    -e SECRET_KEY=your_secret_key \
+    -e SMTP_SERVER=smtp.gmail.com \
+    -e SMTP_PORT=587 \
+    -e SMTP_USERNAME=your_email \
+    -e SMTP_PASSWORD=your_password \
+    -e FROM_EMAIL=no-reply@feedbackflow.com \
+    feedback-backend
+    ```
+
+    Access API docs at: http://localhost:8000/docs
+
 3.  **Frontend:**
     ```
     cd frontend
